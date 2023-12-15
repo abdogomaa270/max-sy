@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -20,10 +19,13 @@ class User extends Authenticatable implements JWTSubject
     protected static function boot()
     {
         parent::boot();
+
         self::creating(function ($model) {
-            $model->id = 'Am' . date('Ymdeis');
+            $usersCount = User::count() + 100001; // Get the current number of users and add 100000 to it
+            $model->id = 'WO' . $usersCount;
         });
     }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -41,12 +43,17 @@ class User extends Authenticatable implements JWTSubject
         'mother_name',
         'email',
         'password',
+        'bocket_password',
         'parent',
         'left_user_id',
         'right_user_id',
-        'left_points',
-        'right_points',
         'total_points',
+        'left_children',
+        'right_children',
+        'calculated_children',
+        'total_work',
+        'level',
+        'product_id',
     ];
 
     public function leftChild()
@@ -55,11 +62,15 @@ class User extends Authenticatable implements JWTSubject
     }
     public function details()
     {
-        return $this->hasOne(UserDetail::class, 'user_id');
+        return $this->hasOne(UserDetail::class, 'user_id','id');
     }
     public function rightChild()
     {
         return $this->belongsTo(User::class, 'right_user_id', 'id');
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     protected $hidden = [

@@ -39,8 +39,12 @@ return new class extends Migration
             $table->string('address_country',40)->nullable();
             $table->string('address_city',40)->nullable();
             $table->string('address_street',100)->nullable();
-            $table->string('identity')->nullable(); // البطاقه
-
+            $table->string('shipping_country',40)->nullable();
+            $table->string('shipping_city',40)->nullable();
+            $table->string('shipping_street',100)->nullable();
+            $table->string('identity_front')->nullable();
+            $table->string('identity_back')->nullable();
+            $table->string('healthDoc')->nullable(); //الضمان الصحي
 
             // ...
             $table->timestamps();

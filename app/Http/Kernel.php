@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verifyJwt'=>\App\Http\Middleware\VerifyJwtToken::class,
         'isAdmin' => \App\Http\Middleware\isAdmin::class,
-        'dateFormatter'=>\App\Http\Middleware\dateFormatter::class
+        'dateFormatter'=>\App\Http\Middleware\dateFormatter::class,
+        'treeAuthority' => \App\Http\Middleware\TreeAuthority::class,
     ];
 }

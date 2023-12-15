@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('receiver');
             $table->foreign('receiver')->references('id')->on('users')->onDelete('cascade');
             $table->integer('amount');
+            $table->string('direction',15);
             $table->timestamps();
         });
     }

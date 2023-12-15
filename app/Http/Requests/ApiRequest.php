@@ -32,18 +32,18 @@ abstract class ApiRequest extends FormRequest
         $errors= (new ValidationException($validator))->errors();
         if (!empty($errors))
         {
-//            $ErrorList=[];
-//            foreach ($errors as  $message)
-//            {
-//                $ErrorList=[
-//                    "error"=>$message[0]
-//
-//                ];
-//            }
+            $ErrorList=[];
+            foreach ($errors as  $message)
+            {
+                $ErrorList=[
+                    "error"=>$message[0]
+
+                ];
+            }
             throw new HttpResponseException(
                 response()->json(
                     [
-                        'errors'=>$errors
+                        'errors'=>$ErrorList
                     ],
                     400
                 )

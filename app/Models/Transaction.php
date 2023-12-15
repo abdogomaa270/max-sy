@@ -18,9 +18,20 @@ class Transaction extends Model
             $model->id = Str::uuid();
         });
     }
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender', 'id');
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(User::class, 'receiver', 'id');
+    }
+
     protected $fillable = [
         'sender',
-        'reciever',
+        'receiver',
         'amount',
+        'direction'
     ];
 }

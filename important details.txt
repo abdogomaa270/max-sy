@@ -1,0 +1,8 @@
+
+ssh root@82.180.137.98
+Uzu@270-xX
+
+
+
+https://82.180.137.98:8443/
+011@MostafaGomaa

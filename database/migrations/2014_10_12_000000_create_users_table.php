@@ -17,18 +17,22 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('nickname');
-            $table->string('father_name');
-            $table->string('mother_name');
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
             $table->string('email')->nullable()->unique();
             $table->string('password');
+            $table->boolean('role')->default(0);
             $table->string('bocket_password')->nullable();
             $table->string('left_user_id')->nullable();
             $table->string('right_user_id')->nullable();
             $table->string('parent')->nullable();
-            $table->unsignedInteger('left_points')->default(0);
-            $table->unsignedInteger('right_points')->default(0);
             $table->unsignedBigInteger('total_points')->default(0);
-            $table->boolean('ispunished')->default(false);
+            $table->unsignedTinyInteger('left_children')->default(0);
+            $table->unsignedTinyInteger('right_children')->default(0);
+            $table->unsignedInteger('calculated_children')->default(0);
+            $table->unsignedInteger('total_work')->default(0); //will be calced in add user
+            $table->unsignedInteger('level');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

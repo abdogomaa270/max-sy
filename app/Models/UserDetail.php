@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserDetail extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'user_id';
+    protected $keyType = 'string';
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     protected $fillable=[
         'user_id',
@@ -28,6 +30,20 @@ class UserDetail extends Model
         'address_country',
         'address_city',
         'address_street',
-        'identity',
+        'shipping_country',
+        'shipping_city',
+        'shipping_street',
+        'identity_front',
+        'identity_back',
+        'healthDoc',
     ];
+    protected $casts = [
+        'userId' => 'string',
+    ];
+
+
+
+
+
+
 }
