@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\BlackList;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -71,6 +72,12 @@ class User extends Authenticatable implements JWTSubject
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+    // ...
+
+    public function blackList()
+    {
+        return $this->hasOne(BlackList::class);
     }
 
     protected $hidden = [

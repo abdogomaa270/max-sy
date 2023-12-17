@@ -157,7 +157,7 @@ try {
 
 }
 
-
+//---------------------------------------------------------------------------------------------------------
     private function incrementChildrenCounter($creator,$newSignedChild)
     {
         while ($creator->parent) {
@@ -183,23 +183,27 @@ try {
         }
         return true;
     }
+    //---------------------------------------------------------------------------------------------------------
 
     public function getUsersByWeek($weekNumber=null)
     {
         // If no weekNumber is provided, use the current week number
-        if (is_null($weekNumber)) {
-            $weekNumber = Carbon::now()->week;
-        }
+       // If no weekNumber is provided, use the current week number
+       if (is_null($weekNumber)) {
+            
+         $now = Carbon::now();
+         $startDate = $now->startOfWeek(Carbon::SATURDAY)->startOfDay();
+         $endDate = $now->endOfWeek(Carbon::FRIDAY)->endOfDay();
+         $weekNumber = $now->week;
+     }
 
-        $year = Carbon::now()->year;
-        $startDate = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek(Carbon::SATURDAY); //included
-        $endDate = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek(Carbon::FRIDAY);//excluded
+      $year = Carbon::now()->year;
+      // Set start date to the beginning of Saturday
+      $startDate = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek(Carbon::SATURDAY)->startOfDay();	
 
-        return response()->json([
-            $weekNumber,
-            'startDate'=>$startDate,
-            'endDate'=>$endDate
-        ],200);
+         // Set end date to the end of Friday
+      $endDate = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek(Carbon::FRIDAY)->endOfDay();
+
         $leftUsers = AllSigned::with('user')
             ->where('parent_id', Auth::id())
             ->where('direction', 'left')

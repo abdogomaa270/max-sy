@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('parent_id');
             $table->string('child_id');
             $table->string('direction');
-            $table->unsignedInteger('level');
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('child_id')->references('id')->on('users')->onDelete('cascade');

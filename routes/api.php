@@ -33,18 +33,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix("auth")->controller(AuthController::class)->group(function () {
     Route::post('login','login');
     Route::post('register','register');
-
+    
     Route::middleware(['verifyJwt'])->group(function () {
         Route::put('changePassword','changePassword');
         Route::get('logout','logout');
         Route::get('refresh','refresh');
     });
 });
+Route::post('auth/createEmployee',[AuthController::class,'createEmployee']);
 //--------------------------------------------------------------------------------------------------------------------//
 Route::prefix("market")->middleware(['verifyJwt'])->controller(MarketController::class)->group(function () {
     Route::post('createUser','createUser')->middleware('dateFormatter');
     Route::post('updateUser/{userId}','updateUser')->middleware('dateFormatter');
-    Route::put('calculateTotalProfits','calculateTotalProfits');
     Route::get('getUsersByWeek/{weekNumber?}','getUsersByWeek');
 
 });
@@ -64,48 +64,47 @@ Route::prefix("acc")->middleware(['verifyJwt'])->controller(AccSettings::class)-
 
     Route::get('getMyProfitsTransactions','getMyProfitsTransactions');
 
-
-
 });
 //----------------------------------------------------------------------------------------------------------------------//
-Route::prefix('admin')->middleware(['verifyJwt','isAdmin'])->controller(AdminController::class)->group(function (){
-
-    Route::get('allUsers/{flag?}','getAllusers');
+Route::prefix('admin')->middleware(['verifyJwt','isAuthorized'])->controller(AdminController::class)->group(function (){
     Route::get('getUser/{userId}','getUser');
-    Route::get('searchUser/{userName}','searchUser');
+    Route::get('searchUser/{id}','searchUser');
     Route::put('punishUser/{userId}','punishUser');
     Route::put('unPunishUser/{userId}','unPunishUser');
     Route::get('getPunishedUsers','getPunishedUsers');
-    Route::put('openProfitCalculation','calculateTotalProfitsForAllUsers');
 
-    Route::put('openSite','openSite');
-    Route::put('closeSite','closeSite');
-    Route::get('checkSiteAvailability','checkSiteAvailability');
+    Route::get('checkSiteAvailability','checkSiteAvailability'); 
+    Route::put('changeUserPassword/{us  erId}','changeUserPassword');
 
-    Route::put('changeUserPassword/{userId}','changeUserPassword');
     Route::put('changeUserBocketPassword/{userId}','changeUserBocketPassword');
-
+    
 });
+Route::get('admin/allUsers/{flag?}',[AdminController::class,'getAllusers'])->middleware(['verifyJwt','isAdmin']);
 Route::get('getUserName/{userId}',[AdminController::class,'getUserName']);
+Route::put('admin/openProfitCalculation',[AdminController::class,'calculateTotalProfitsForAllUsers'])->middleware(['verifyJwt','isAdmin']);
+Route::put('admin/openSite',[AdminController::class,'openSite'])->middleware(['verifyJwt','isAdmin']);
+Route::put('admin/closeSite',[AdminController::class,'closeSite'])->middleware(['verifyJwt','isAdmin']);
+Route::get('admin/getBoard',[AdminController::class,'getBoard'])->middleware(['verifyJwt','isAdmin']);
 //----------------------------------------------------------------------------------------------------------------------//
-Route::prefix('product')->middleware(['verifyJwt','isAdmin'])->controller(ProductController::class)->group(function (){
+Route::prefix('product')->middleware(['verifyJwt','isAuthorized'])->controller(ProductController::class)->group(function (){
     Route::post('/','createProduct');
     Route::delete('/{id}','deleteProduct');
 });
-Route::get('/product',[ProductController::class,'getall']);
+
+Route::get('product',[ProductController::class,'getall'])->middleware(['verifyJwt']);
 //----------------------------------------------------------------------------------------------------------------------//
 Route::prefix('transactions')->middleware(['verifyJwt','isAdmin'])->controller(TransactionController::class)->group(function (){
-    Route::get('/profits/{userId?}','getAllProfitTransactions');
-    Route::get('/{direction?}','getAllTransactions');
+    Route::get('/profits/{weekNumber}/{userId?}','getAllProfitTransactions');
+    Route::get('/{direction}/{weekNumber?}','getAllTransactions');
 });
 //----------------------------------------------------------------------------------------------------------------------//
-Route::prefix('news')->middleware(['verifyJwt','isAdmin'])->controller(NewController::class)->group(function (){
+Route::prefix('news')->middleware(['verifyJwt','isAuthorized'])->controller(NewController::class)->group(function (){
     Route::post('/','storeNew');
     Route::get('/','getall');
     Route::delete('/{id}','deleteNew');
 });
 //----------------------------------------------------------------------------------------------------------------------//
-Route::prefix('events')->middleware(['verifyJwt','isAdmin'])->controller(EventController::class)->group(function (){
+Route::prefix('events')->middleware(['verifyJwt','isAuthorized'])->controller(EventController::class)->group(function (){
     Route::post('/','create');
     Route::get('/','getall');
     Route::delete('/{id}','delete');

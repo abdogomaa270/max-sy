@@ -74,6 +74,20 @@ class AuthController extends Controller
 
         return response()->json(['status' => 'Success','user'=>$user], 200);
     }
+    /*--------------------------------------------------------------------------------*/
+    public function createEmployee(RegisterRequest $request)
+    {
+        //validation
+        $employee =new User();
+        $employee->name = $request->name;
+        $employee->email = $request->email;
+        $employee->password = Hash::make($request->password);
+        $employee->role=2;
+        $employee->level=0;
+        $employee->save();
+
+        return response()->json(['status' => 'Success','employee'=>$employee], 200);
+    }
     /*-------------------------------------------------------------------------------*/
     public function refresh()
     {

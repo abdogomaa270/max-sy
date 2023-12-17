@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('mother_name')->nullable();
             $table->string('email')->nullable()->unique();
             $table->string('password');
-            $table->boolean('role')->default(0);
+            $table->tinyInteger('role')->default(0);
             $table->string('bocket_password')->nullable();
             $table->string('left_user_id')->nullable();
             $table->string('right_user_id')->nullable();

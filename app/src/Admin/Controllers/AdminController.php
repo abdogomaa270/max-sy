@@ -18,10 +18,10 @@ class AdminController
     //@access admin
     public function getAllUsers($flag = false)
     {
-        $users = ($flag)
-            ? User::where('total_points', '>', 0)->get()
-            : User::get();
-
+     $users = ($flag) 
+        ? User::with('blackList')->where('total_points', '>', 0)->paginate(2)
+        : User::with('blackList')->paginate(20);   // Access the current page
+  
         return response()->json(['status' => 'success', 'data' => $users], 200);
     }
     //@params  null
@@ -38,8 +38,8 @@ class AdminController
     //@params  null
     //@desc get all users in the system
     //@access admin
-    public function searchUser($userName) {
-        $users = User::where('name', 'like', '%' . $userName . '%')->get();
+    public function searchUser($id) {
+        $users = User::where('id', 'like', '%' . $id . '%')->get();
         return response()->json(['status' => 'success', 'data' => $users], 200);
     }
     //@params :  userId as queryparam
@@ -137,6 +137,9 @@ class AdminController
 
     }
     //----------------------------------------------------------------------------------
+    //@desc : get user name by id
+    //@access : user
+    //@used in : when user trnasfere points to another user
     public static function getUserName($userId)
     {
         $user = User::find($userId);
@@ -201,5 +204,12 @@ class AdminController
         return true;
     }
 //--------------------------------------------------------------------------------------------------------------------------//
-
+    public function getBoard()
+    {
+        $employees = User::whereIn('role', [1, 2])->get();
+        if($employees->isEmpty()){
+            return response()->json(['status' => 'faild', 'msg' => 'لا يوجد موظفين'], 404);
+        }
+        return response()->json(['status' => 'success', 'data' => $employees], 200);
+    }
 }
